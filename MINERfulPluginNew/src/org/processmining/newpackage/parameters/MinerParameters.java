@@ -29,7 +29,7 @@ public class MinerParameters extends PluginParametersImpl {
 		setNoConflict(false);
 		setNoFolding(false);
 		setNoRedundancy(false);
-		setThreshold(0.0);
+		setThreshold(1.0);
 		setInterest(0.0);
 		setConfidence(0.0);
 	}
@@ -138,7 +138,7 @@ public class MinerParameters extends PluginParametersImpl {
 		}
 		else noCF = " ";
 
-		this.args =  new String[] {"-iLF", "dummyInput.xes", "-condec", "dummyOutput.xml", "-i", String.valueOf( getInterest() ), "-t", String.valueOf( getThreshold()), "-c", String.valueOf( getConfidence()),  R, C, noCF };
+		this.args =  new String[] {"-iE", "xes" ,"-iLF", "dummyInput.xes", "-condec", "dummyOutput.xml", "-i", String.valueOf( getInterest() ), "-t", String.valueOf( getThreshold()), "-c", String.valueOf( getConfidence()),  R, C, noCF };
 		
 	}
 	

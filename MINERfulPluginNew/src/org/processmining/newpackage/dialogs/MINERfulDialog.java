@@ -3,7 +3,6 @@ package org.processmining.newpackage.dialogs;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
-import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
@@ -14,6 +13,7 @@ import javax.swing.event.ChangeListener;
 import org.deckfour.xes.model.XLog;
 import org.processmining.newpackage.parameters.MinerParameters;
 
+//import MINERfulPackage.parameters.MinerParameters;
 import com.fluxicon.slickerbox.factory.SlickerFactory;
 
 public class MINERfulDialog extends JPanel {
@@ -35,7 +35,7 @@ public class MINERfulDialog extends JPanel {
 	private final JLabel confidenceLabel;
 	private final JSlider confidenceSlider;
 	private final JLabel confidenceValue;
-	
+/*	
 	private final JLabel noconflictLabel;
 	private final JCheckBox noconflictBox;
 	private final JLabel noconflictValue;
@@ -47,7 +47,7 @@ public class MINERfulDialog extends JPanel {
 	private final JLabel nofoldingLabel;
 	private final JCheckBox nofoldingBox;
 	private final JLabel nofoldingValue;
-	
+*/	
 	
 	public class ParametersWrapper {
 		public MinerParameters parameters;
@@ -245,7 +245,7 @@ public class MINERfulDialog extends JPanel {
 		//-------------------------------------------------
 		//------------ No Conflict GUI
 		//-------------------------------------------------
-		
+/*		
 		noconflictLabel = factory.createLabel("No Conflict");
 		{
 			GridBagConstraints cNoConflictLabel = new GridBagConstraints();
@@ -305,11 +305,11 @@ public class MINERfulDialog extends JPanel {
 				}
 				
 		gridy++;
-		
+*/		
 		//-------------------------------------------------
 		//------------ No Redundancy GUI
 		//-------------------------------------------------
-		
+/*		
 		noredundancyLabel = factory.createLabel("No Redundancy");
 		{
 			GridBagConstraints cNoRedundancyLabel = new GridBagConstraints();
@@ -369,11 +369,11 @@ public class MINERfulDialog extends JPanel {
 				}
 				
 		gridy++;
-		
+*/		
 		//-------------------------------------------------
 		//------------ No Folding GUI
 		//-------------------------------------------------
-		
+/*		
 		nofoldingLabel = factory.createLabel("No Folding");
 		{
 			GridBagConstraints cNoFoldingLabel = new GridBagConstraints();
@@ -387,7 +387,7 @@ public class MINERfulDialog extends JPanel {
 		
 		nofoldingBox = factory.createCheckBox("      ", false); //"Select No Conflicts: Yes/No "
 		{
-			noconflictBox.setSelected(p.parameters.isNoFolding());
+			nofoldingBox.setSelected(p.parameters.isNoFolding());
 			GridBagConstraints cnofoldingbox = new GridBagConstraints();
 			cnofoldingbox.gridx = 1;
 			cnofoldingbox.gridy = gridy;
@@ -433,7 +433,7 @@ public class MINERfulDialog extends JPanel {
 		}
 				
 		gridy++;
-		
+*/		
 		//----------------------------------------
 		//--------- Change listeners
 		//----------------------------------------
@@ -458,7 +458,7 @@ public class MINERfulDialog extends JPanel {
 				confidenceValue.setText(String.format("%.2f", p.parameters.getConfidence()));
 			}
 		});
-		
+/*		
 		noconflictBox.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				p.parameters.setNoConflict(noconflictBox.isSelected());
@@ -479,7 +479,7 @@ public class MINERfulDialog extends JPanel {
 				noredundancyValue.setText(String.valueOf(p.parameters.isNoRedundancy()));
 			}
 		});
-				
+*/				
 		
 		
 		//------------------------------------------------------

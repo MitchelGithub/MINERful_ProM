@@ -29,6 +29,7 @@ import org.processmining.plugins.declareminer.visualizing.DeclareModel;
 import org.processmining.plugins.declareminer.visualizing.Parameter;
 import org.processmining.plugins.declareminer.visualizing.XMLBrokerFactory;
 
+
 //@Plugin(name = "Your plug-in name", parameterLabels = { "Name of your first input", "Name of your second input", "Name of your parameters" }, 
 //	    returnLabels = { "Name of your output" }, returnTypes = { YourOutput.class })
 //public class YourPlugin extends YourAlgorithm {
@@ -52,10 +53,11 @@ public class MINERfulMinerNew {
 	 * @param context The context to run in.
 	 * @param input XES event log
 	 * @return A declare model mined using the MINERful algorithm
+	 * @throws Exception 
 	 */
 	@UITopiaVariant(affiliation = "TU/e", author = "M.H.M. Schouten", email = "m.h.m.schouten@student.tue.nl")
 	@PluginVariant(variantLabel = "MINERful Declare Miner, dialog", requiredParameterLabels = {0 })
-	public DeclareMap run(UIPluginContext context, XLog input) { //, MinerParameters parameters
+	public DeclareMap run(UIPluginContext context, XLog input) throws Exception { //, MinerParameters parameters
         context.getProgress().setMinimum(0);
         context.getProgress().setMaximum(input.size());
 
@@ -65,11 +67,12 @@ public class MINERfulMinerNew {
         MinerParameters params =  dialog.getMinerParameters();
         params.writeArgs();
 		String[] args = params.getArgs();
-
+		
+		//String[] args =  new String[] {"-iLF", "dummyInput.xes", "-condec", "dummyOutput.xml", "-i", "0.9", "C" };
+		
 		//Create a MINERful starter and run main method
 		MinerFulMinerStarter minerMinaStarter = new MinerFulMinerStarter();
 		minerMinaStarter.main(args, input);
-
 		
 		InputCmdParameters inputParams = minerMinaStarter.inputParams2;
 		MinerFulCmdParameters minerFulParams = minerMinaStarter.minerFulParams2;
@@ -83,12 +86,43 @@ public class MINERfulMinerNew {
         
         //Get DeclareMap produced by the MINERful algorithm
         DeclareMap decModel = minerLaunch.mine(input);
-        
+   
         //Apply export method to correct visualization
         DeclareMap output = export( new DeclareModel( decModel.getModel(), decModel.getView() ) );	
+        
+ /*
+  * TODO: Fix correct output view
+  * 
+        // Export / Import
+		DeclareExport export = new DeclareExport();
+		DeclareModelImportPlugin imp = new DeclareModelImportPlugin();
 		
-        //DeclareMap decModel = new DeclareMap(model, modelCh, view,viewCh, broker, brokerCh);
-		System.out.println("No. Constraints: "+ decModel.getModel().constraintDefinitionsCount()+"-- No. Activities: "+ decModel.getModel().activityDefinitionsCount());
+		DeclareModel[] models = new DeclareModel[1];
+		DeclareModel dModel = new DeclareModel( decModel.getModel(), decModel.getView() );
+		models[0] = dModel;
+		String path = "pathname";
+		File file = new File(path); //.createTempFile("arg0", "arg1");
+		InputStream stream = new ByteArrayInputStream(path.getBytes());
+		
+		export.export(context, models, file);
+		DeclareModel decie = imp.importFromStream(context, file, path, 0);
+
+        // Oude output
+        //AssignmentModel model = decie.getModel();
+        //AssignmentModelView view = decie.getView();
+        AssignmentModel model = decModel.getModel();
+        AssignmentModelView view = decModel.getView();
+        AssignmentViewBroker broker = decModel.getBroker();
+        //broker.readAssignmentGraphical(model, view);
+		org.processmining.plugins.declare.visualizing.AssignmentViewBroker brokerCh = decModel.getBrokerCh(); 
+		//org.processmining.plugins.declare.visualizing.XMLBrokerFactory.newAssignmentBroker("dummy"); //"dummy"
+		org.processmining.plugins.declare.visualizing.AssignmentModel modelCh = decModel.getModelCh();
+		//brokerCh.readAssignment();
+		org.processmining.plugins.declare.visualizing.AssignmentModelView viewCh = decModel.getViewCh(); 
+		//new org.processmining.plugins.declare.visualizing.AssignmentModelView(modelCh);
+		DeclareMap decModel2 = new DeclareMap(model, modelCh, view ,viewCh, broker, brokerCh); 
+		System.out.println("No. Constraints: "+ decModel2.getModel().constraintDefinitionsCount()+"-- No. Activities: "+ decModel2.getModel().activityDefinitionsCount());
+  */
         return output;
 	}
 	
@@ -132,13 +166,13 @@ public class MINERfulMinerNew {
                                         String x = cd.getCaption();
                                         boolean c;
                                         
-
+/*
                                         if (x.contains("not chain succession")) {
                                         	//models.getModel().deleteConstraintDefinition(cd);
                                         	 c = false;
                                         	System.out.println("Deleted: " + x);
                                         }
-                                        else  c = model.addConstraintDefiniton(toAdd);
+                                        else */ c = model.addConstraintDefiniton(toAdd);
 //Previous code removes the not chain succession relation                                        
                                         if (!c) {
                                                 c = model.addConstraintDefiniton(new ConstraintDefinition(l, models.getModel(), cd));

@@ -436,6 +436,7 @@ public class DeclareEncoderDecoder {
 		}
 
 		TemplateBroker templateBroker = XMLBrokerFactory.newTemplateBroker(languageFile.getAbsolutePath());
+//		TemplateBroker templateBroker = XMLBrokerFactory.newTemplateBroker();
 		List<Language> languagesList = templateBroker.readLanguages();
 
 		//the first language in the list is the condec language, which is what we need

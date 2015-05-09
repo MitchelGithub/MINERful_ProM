@@ -56,7 +56,7 @@ public class MinerFulCmdParameters extends ParamsManager {
     
     public MinerFulCmdParameters() {
 		super();
-		this.avoidRedundancy = false;
+		this.avoidRedundancy = true;
 		this.deepAvoidRedundancy = false;
 		this.avoidConflicts = false;
 		this.foreseeDistances = false;
@@ -86,7 +86,8 @@ public class MinerFulCmdParameters extends ParamsManager {
 					"Invalid value for " + OUT_BRANCHING_LIMIT_PARAM_NAME +
 					" (must be equal to or greater than " + (MINIMUM_BRANCHING_LIMIT) + ")");
 		}
-        this.avoidRedundancy = line.hasOption(AVOID_REDUNDANCY_PARAM);
+//        this.avoidRedundancy = line.hasOption(AVOID_REDUNDANCY_PARAM);
+// set to true
         this.deepAvoidRedundancy = line.hasOption(DEEP_AVOID_REDUNDANCY_PARAM);
         this.avoidConflicts = line.hasOption(AVOID_CONFLICTS_PARAM);
 
@@ -109,6 +110,7 @@ public class MinerFulCmdParameters extends ParamsManager {
    
         }*/
         this.inputFile = log;
+        this.avoidRedundancy = true;
         if (outStatsFilePath != null) {
         	this.statsOutputFile = new File(outStatsFilePath);
         }

@@ -165,9 +165,11 @@ public class MinerFulMinerStarter extends AbstractMinerFulStarter {
 		// Remove from the analysed alphabet those activities that are
 		// specified in a user-defined list
 		//logParser.getEventEncoderDecoder().excludeThese(minerFulParams.activitiesToExcludeFromResult);
-		return logParser;
 		
+		
+		return logParser;
 		/*
+		
 		switch (inputParams.inputLanguage) {
 		case xes:
 			ClassificationType evtClassi = MinerFulLauncher.fromInputParamToXesLogClassificationType(inputParams.eventClassification);
@@ -187,7 +189,7 @@ public class MinerFulMinerStarter extends AbstractMinerFulStarter {
 			break;
 		case strings:
 			try {
-				logParser = new StringLogParser(inputParams.inputFile, ClassificationType.NAME);
+				//logParser = new StringLogParser(inputParams.inputFile, ClassificationType.NAME);
 			} catch (Exception e) {
 				e.printStackTrace();
 				System.exit(1);
@@ -630,13 +632,14 @@ public class MinerFulMinerStarter extends AbstractMinerFulStarter {
         csvSummaryBuffer.append(";");
         csvSummaryLegendBuffer.append("'Relation constraints after pruning'");
         csvSummaryBuffer.append(numOfRelationConstraintsAfterPruningAndThresholding);
-
+/*
         csvSummaryComprehensiveBuffer.append("\n\nTimings' summary: \n");
         csvSummaryComprehensiveBuffer.append(csvSummaryLegendBuffer.toString());
         csvSummaryComprehensiveBuffer.append("\n");
         csvSummaryComprehensiveBuffer.append(csvSummaryBuffer.toString());
         
         logger.info(csvSummaryComprehensiveBuffer.toString());
+*/
 	}
     
     public void marshalStats(GlobalStatsTable statsTable, File outFile, TaskCharArchive taskCharArchive) throws JAXBException, IOException {

@@ -2,7 +2,6 @@ package minerful;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
 import java.util.NavigableMap;
@@ -83,6 +82,7 @@ public class MinerFulProcessViewerStarter extends AbstractMinerFulStarter {
     			}
         }
         if (viewParams.fileToSaveConDecDefinition != null) {
+        	/*
         	try {
 				printer.printConDecModel(viewParams.fileToSaveConDecDefinition);
 	        	System.out.println("Discovered process written in ConDec/Declare XML format on " + viewParams.fileToSaveConDecDefinition);
@@ -90,6 +90,7 @@ public class MinerFulProcessViewerStarter extends AbstractMinerFulStarter {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			*/
         }
 
         switch (viewParams.constraintsSorting) {
