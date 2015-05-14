@@ -1,5 +1,6 @@
 package org.processmining.newpackage.plugins;
 
+import java.awt.geom.Point2D;
 import java.util.Collection;
 import java.util.Vector;
 
@@ -19,6 +20,7 @@ import org.processmining.framework.plugin.annotations.PluginVariant;
 import org.processmining.newpackage.dialogs.MINERfulDialog;
 import org.processmining.newpackage.parameters.MinerParameters;
 import org.processmining.plugins.declareminer.visualizing.ActivityDefinition;
+import org.processmining.plugins.declareminer.visualizing.ActivityDefinitonCell;
 import org.processmining.plugins.declareminer.visualizing.AssignmentModel;
 import org.processmining.plugins.declareminer.visualizing.AssignmentModelView;
 import org.processmining.plugins.declareminer.visualizing.AssignmentViewBroker;
@@ -30,23 +32,15 @@ import org.processmining.plugins.declareminer.visualizing.Parameter;
 import org.processmining.plugins.declareminer.visualizing.XMLBrokerFactory;
 
 
-//@Plugin(name = "Your plug-in name", parameterLabels = { "Name of your first input", "Name of your second input", "Name of your parameters" }, 
-//	    returnLabels = { "Name of your output" }, returnTypes = { YourOutput.class })
-//public class YourPlugin extends YourAlgorithm {
+/*
+ * This plugin uses the MINERful algorithm to mine Declare models
+ * The MINERful algorithm code used in this plugin is taken in consent from https://github.com/cdc08x/MINERful
+ * 
+ */
 
 @Plugin(name = "MINERful Declare Miner", parameterLabels = { "Input event log" }, 
 		    returnLabels = { "Declare model mined using MINERful miner" }, returnTypes = { org.processmining.plugins.declareminer.visualizing.DeclareMap.class }, userAccessible = true)
 public class MINERfulMinerNew {
-	
-	/**
-	 * The plug-in variant that runs in any context and requires a single event log
-	 * 
-	 * @param context The context to run in.
-	 * @param input XES event log
-	 * @return A declare model mined using the MINERful algorithm
-	 */
-
-
 	/**
 	 * The plug-in variant that runs in any context and requires a single event log and uses parameters
 	 * 
@@ -67,9 +61,7 @@ public class MINERfulMinerNew {
         MinerParameters params =  dialog.getMinerParameters();
         params.writeArgs();
 		String[] args = params.getArgs();
-		
-		//String[] args =  new String[] {"-iLF", "dummyInput.xes", "-condec", "dummyOutput.xml", "-i", "0.9", "C" };
-		
+			
 		//Create a MINERful starter and run main method
 		MinerFulMinerStarter minerMinaStarter = new MinerFulMinerStarter();
 		minerMinaStarter.main(args, input);
@@ -87,55 +79,18 @@ public class MINERfulMinerNew {
         //Get DeclareMap produced by the MINERful algorithm
         DeclareMap decModel = minerLaunch.mine(input);
    
-        //Apply export method to correct visualization
-        DeclareMap output = export( new DeclareModel( decModel.getModel(), decModel.getView() ) );	
+        //Apply updateVisualization method to correct visualization
+        DeclareMap output = updateVisualization( new DeclareModel( decModel.getModel(), decModel.getView() ) );	
         
- /*
-  * TODO: Fix correct output view
-  * 
-        // Export / Import
-		DeclareExport export = new DeclareExport();
-		DeclareModelImportPlugin imp = new DeclareModelImportPlugin();
-		
-		DeclareModel[] models = new DeclareModel[1];
-		DeclareModel dModel = new DeclareModel( decModel.getModel(), decModel.getView() );
-		models[0] = dModel;
-		String path = "pathname";
-		File file = new File(path); //.createTempFile("arg0", "arg1");
-		InputStream stream = new ByteArrayInputStream(path.getBytes());
-		
-		export.export(context, models, file);
-		DeclareModel decie = imp.importFromStream(context, file, path, 0);
-
-        // Oude output
-        //AssignmentModel model = decie.getModel();
-        //AssignmentModelView view = decie.getView();
-        AssignmentModel model = decModel.getModel();
-        AssignmentModelView view = decModel.getView();
-        AssignmentViewBroker broker = decModel.getBroker();
-        //broker.readAssignmentGraphical(model, view);
-		org.processmining.plugins.declare.visualizing.AssignmentViewBroker brokerCh = decModel.getBrokerCh(); 
-		//org.processmining.plugins.declare.visualizing.XMLBrokerFactory.newAssignmentBroker("dummy"); //"dummy"
-		org.processmining.plugins.declare.visualizing.AssignmentModel modelCh = decModel.getModelCh();
-		//brokerCh.readAssignment();
-		org.processmining.plugins.declare.visualizing.AssignmentModelView viewCh = decModel.getViewCh(); 
-		//new org.processmining.plugins.declare.visualizing.AssignmentModelView(modelCh);
-		DeclareMap decModel2 = new DeclareMap(model, modelCh, view ,viewCh, broker, brokerCh); 
-		System.out.println("No. Constraints: "+ decModel2.getModel().constraintDefinitionsCount()+"-- No. Activities: "+ decModel2.getModel().activityDefinitionsCount());
-  */
         return output;
 	}
 	
-	/*
-	if (result != InteractionResult.FINISHED) {
 
-	}
-    */ //nodig?
-
-       public DeclareMap export(final DeclareModel models) {
+	
+       public DeclareMap updateVisualization(final DeclareModel models) {
                 final AssignmentModel model = new AssignmentModel(models.getModel().getLanguage());
                 model.setName("Declare model mined using MINERful miner");
-                
+            
                 final Vector ads = new Vector();
                 ActivityDefinition activitydefinition = null;
                         int k = 0;
@@ -178,25 +133,77 @@ public class MINERfulMinerNew {
                                                 c = model.addConstraintDefiniton(new ConstraintDefinition(l, models.getModel(), cd));
                                         }
                                         l++;
-                                }    
-                final AssignmentViewBroker broker = XMLBrokerFactory.newAssignmentBroker("dummy");
+                                }  
+                                
+                //Required for visualization   
+                AssignmentViewBroker broker = XMLBrokerFactory.newAssignmentBroker("dummy");
                 broker.addAssignmentAndView(model, new AssignmentModelView(model));
         		org.processmining.plugins.declare.visualizing.AssignmentViewBroker brokerCh = org.processmining.plugins.declare.visualizing.XMLBrokerFactory.newAssignmentBroker("dummy");
         		org.processmining.plugins.declare.visualizing.AssignmentModel modelCh = brokerCh.readAssignment();
         		org.processmining.plugins.declare.visualizing.AssignmentModelView viewCh = new org.processmining.plugins.declare.visualizing.AssignmentModelView(modelCh);
-                DeclareMap decModel = new DeclareMap(model, modelCh, new AssignmentModelView(model),viewCh, broker, brokerCh);
+        		DeclareMap decModel = new DeclareMap(model, modelCh, new AssignmentModelView(model),viewCh, broker, brokerCh);
                 
-                return decModel;
+        		//Draw the layout for the Declare model
+                decModel = layout(models.getView(), models.getModel());
+                //ProM return blank output without this
+                viewCh = layoutCh(viewCh, modelCh);
+                DeclareMap decModel2 = new DeclareMap(decModel.getModel(), null, decModel.getView() ,viewCh, null, null);
+                
+                return decModel2;
 	        }
-     /*  
-   	protected DeclareModel importFromStream(final PluginContext context, final InputStream input,
-		final long fileSizeInBytes)  {
-		context.getFutureResult(0).setLabel("test");
-		final AssignmentViewBroker broker = XMLBrokerFactory.newAssignmentBroker("dummy");
-		final AssignmentModel model = broker.readAssignment();
-		final AssignmentModelView view = new AssignmentModelView(model);
-		broker.readAssignmentGraphical(model, view);
-		final DeclareModel decModel = new DeclareModel(model, view);
-		return decModel;
-	}*/      
+    
+    /*
+     *  Draws the Declare model in a circle
+     *  Changes made here will also need to be changed in the layoutCh function
+     */
+   	public static DeclareMap layout(AssignmentModelView view, AssignmentModel model ){
+		view.getGraph().doLayout();
+		int i = 0;
+		int noCells = view.activityDefinitionCells().size();
+		double stepsize = 2 * Math.PI /noCells;
+		double alpha = 0;
+		double X = 0;
+		double Y = 0;
+		for (ActivityDefinitonCell cell : view.activityDefinitionCells()) {
+			new Integer(i + 1);
+			X = 500+300*Math.sin(alpha);
+			Y = 200+100*Math.cos(alpha);
+			String label = cell.getActivityDefinition().getName();
+			cell.setSize(new Point2D.Double(5.*(label.length()+9), 30.0));
+					// puts tasks in a line
+					//cell.setPosition(new Point2D.Double(20. + (i * 180), 50 + (i * 80)));
+			cell.setPosition(new Point2D.Double(X, Y));
+			i++;
+			alpha += stepsize;
+		}
+		return new DeclareMap(model, null, view, null, null, null);
+	}
+   	
+   	/*
+   	 * 		Duplicate of normal layout function, for some reason required for ProM 
+   	 * 		Changes made to layout function should also be made here
+   	 */
+   	 
+   	public static org.processmining.plugins.declare.visualizing.AssignmentModelView layoutCh(org.processmining.plugins.declare.visualizing.AssignmentModelView view, org.processmining.plugins.declare.visualizing.AssignmentModel model ){
+		view.getGraph().doLayout();
+		int i = 0;
+		int noCells = view.activityDefinitionCells().size();
+		double stepsize = 2 * Math.PI /noCells;
+		double alpha = 0;
+		double X = 0;
+		double Y = 0;
+		for (org.processmining.plugins.declare.visualizing.ActivityDefinitonCell cell : view.activityDefinitionCells()) {
+			new Integer(i + 1);
+			X = 500+300*Math.sin(alpha);
+			Y = 200+100*Math.cos(alpha);
+			String label = cell.getActivityDefinition().getName();
+			cell.setSize(new Point2D.Double(5.*(label.length()+9), 30.0));
+					// puts tasks in a line
+					//cell.setPosition(new Point2D.Double(20. + (i * 180), 50 + (i * 80)));
+			cell.setPosition(new Point2D.Double(X, Y));
+			i++;
+			alpha += stepsize;
+		}
+		return view;
+	}
 }
